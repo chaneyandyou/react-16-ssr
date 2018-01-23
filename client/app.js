@@ -1,8 +1,11 @@
+import { AppContainer } from 'react-hot-loader'
+import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'mobx-react'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { AppContainer } from 'react-hot-loader' // eslint-disable-line
-import App from 'containers/App.jsx'  // eslint-disable-line
-import { BrowserRouter } from 'react-router-dom' // eslint-disable-line
+import App from 'containers/App.jsx'
+import appState from 'store/app-state'
+
 
 // ReactDOM.hydrate(<App />, document.getElementById('root'))
 
@@ -10,9 +13,11 @@ const root = document.getElementById('root');
 const render = (Component) => {
   ReactDOM.render(
     <AppContainer>
-      <BrowserRouter>
-        <Component />
-      </BrowserRouter>
+      <Provider appState={appState}>
+        <BrowserRouter>
+          <Component />
+        </BrowserRouter>
+      </Provider>
     </AppContainer>,
     root,
   );

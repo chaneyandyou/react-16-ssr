@@ -9,8 +9,7 @@ const serverConfig = require('../../build/webpack.config.server')
 
 const getTemplate = () => {
   return new Promise((resolve, reject) => {
-    axios
-      .get('http://localhost:8888/public/index.html')
+    axios.get('http://localhost:8888/public/index.html')
       .then(res => {
         resolve(res.data)
       })
@@ -29,9 +28,7 @@ serverCompiler.watch({}, (err, stats) => {
     throw err
   }
   stats = stats.toJson()
-  stats
-    .errors
-    .forEach(err => console.error(err))
+  stats.errors.forEach(errs => console.error(errs))
   stats
     .warnings
     .forEach(warn => console.error(warn))
@@ -44,9 +41,11 @@ serverCompiler.watch({}, (err, stats) => {
 })
 
 module.exports = function (app) {
-  app.use('/public', proxy({target: 'http://localhost:8888'}))
+  app.use('/public', proxy({
+    target: 'http://localhost:8888',
+  }))
 
-  app.get('*', function (req, res) {
+  app.get('*', (req, res) => {
     getTemplate().then(template => {
       const content = ReactDOMServer.renderToString(serverBundle)
       res.send(template.replace('<!-- app -->', content))
