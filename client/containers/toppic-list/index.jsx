@@ -23,6 +23,15 @@ export default class ToppicList extends React.Component {
 
   }
 
+  asyncBootstrap() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        this.props.appState.count = 3
+        resolve(true)
+      })
+    })
+  }
+
   changeName(e) {
     this.props.appState.changeName(e.target.value)
   }

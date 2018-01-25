@@ -8,6 +8,6 @@ export default {
 
 export const createStoreMap = () => {
   return {
-    AppState: new AppState(),
+    appState: new AppState(),
   }
 }
