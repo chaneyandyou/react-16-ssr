@@ -4,7 +4,7 @@ import {
   action,
 } from 'mobx'
 
-class AppState {
+export default class AppState {
   @observable count = 0
   @observable name = 'jokcy'
   @computed get msg() {
@@ -17,7 +17,3 @@ class AppState {
     this.name = name
   }
 }
-
-const appState = new AppState()
-
-export default appState

@@ -15,7 +15,7 @@ router.post('/login', (req, res, next) => {
       if (resp.status === 200 && resp.data.success) {
         req.session.user = {
           accessToken: req.body.accessToken,
-          loginName: resp.data.loginName,
+          loginName: resp.data.loginname,
           id: resp.data.id,
           avatarUrl: resp.data.avatar_url,
         }
@@ -29,10 +29,11 @@ router.post('/login', (req, res, next) => {
       if (err.response) {
         res.json({
           success: false,
-          data: err.response,
+          data: err.response.data,
         })
       } else {
         next(err)
       }
     })
 })
+module.exports = router

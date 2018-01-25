@@ -22,7 +22,7 @@ const Module = module.constructor
 const mfs = new MemoryFs()
 const serverCompiler = webpack(serverConfig)
 serverCompiler.outputFileSystem = mfs
-let serverBundle
+let serverBundle, createStoreMap //eslint-disable-line
 serverCompiler.watch({}, (err, stats) => {
   if (err) {
     throw err
@@ -38,6 +38,7 @@ serverCompiler.watch({}, (err, stats) => {
   const m = new Module()
   m._compile(bundle, 'server-entry.js')
   serverBundle = m.exports.default
+  createStoreMap = m.exports.createStoreMap
 })
 
 module.exports = function (app) {
@@ -47,7 +48,10 @@ module.exports = function (app) {
 
   app.get('*', (req, res) => {
     getTemplate().then(template => {
-      const content = ReactDOMServer.renderToString(serverBundle)
+      const routerContext = {}
+      const appBundle = serverBundle(createStoreMap(), routerContext, req.url)
+
+      const content = ReactDOMServer.renderToString(appBundle)
       res.send(template.replace('<!-- app -->', content))
     })
   })

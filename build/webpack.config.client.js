@@ -8,22 +8,22 @@ const isDev = process.env.NODE_ENV === 'development'
 
 const config = webpackMerge(baseConfig, {
   entry: {
-    app: path.join(__dirname, '../client/app.js')
+    app: path.join(__dirname, '../client/app.js'),
   },
   output: {
-    filename: '[name].[hash].js'
+    filename: '[name].[hash].js',
   },
   plugins: [
     new HTMLPlugin({
-      template: path.join(__dirname, '../client/template.html')
-    })]
+      template: path.join(__dirname, '../client/template.html'),
+    })],
 })
 
 if (isDev) {
   config.entry = {
     app: [
-      'react-hot-loader/patch', path.join(__dirname, '../client/app.js')
-    ]
+      'react-hot-loader/patch', path.join(__dirname, '../client/app.js'),
+    ],
   }
   config.devServer = {
     host: '0.0.0.0',
@@ -31,12 +31,15 @@ if (isDev) {
     contentBase: path.join(__dirname, '../dist'),
     hot: true,
     overlay: {
-      errors: true
+      errors: true,
     },
     publicPath: '/public',
     historyApiFallback: {
-      index: '/public/index.html'
-    }
+      index: '/public/index.html',
+    },
+    proxy: {
+      '/api': 'http://localhost:3333',
+    },
   }
   config
     .plugins

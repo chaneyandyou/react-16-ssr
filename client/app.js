@@ -4,7 +4,7 @@ import { Provider } from 'mobx-react'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from 'containers/App.jsx'
-import appState from 'store/app-state'
+import AppState from 'store/app-state'
 
 
 // ReactDOM.hydrate(<App />, document.getElementById('root'))
@@ -13,7 +13,7 @@ const root = document.getElementById('root');
 const render = (Component) => {
   ReactDOM.render(
     <AppContainer>
-      <Provider appState={appState}>
+      <Provider appState={new AppState()}>
         <BrowserRouter>
           <Component />
         </BrowserRouter>
