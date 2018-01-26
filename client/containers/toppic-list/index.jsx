@@ -4,6 +4,7 @@ import {
   observer,
   inject,
 } from 'mobx-react'
+import Helmet from 'react-helmet'
 import { AppState } from 'store/app-state'
 
 @inject('appState')
@@ -39,6 +40,10 @@ export default class ToppicList extends React.Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>this is topic list</title>
+          <meta name="description" content="this is description" />
+        </Helmet>
         <input type="text" onChange={this.changeName} />
         <div>{this.props.appState.msg}</div>
       </div>
