@@ -2,7 +2,7 @@ const express = require('express')
 const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
 const session = require('express-session')
-const ReactSSR = require('react-dom/server')
+const serverRender = require('./utils/server-render')
 const fs = require('fs')
 const path = require('path')
 
@@ -26,17 +26,21 @@ app.use('/api/user', require('./utils/handle-login'))
 app.use('/api', require('./utils/proxy'))
 
 if (!isDev) {
-  const serverEntry = require('../dist/server-entry').default
-  const template = fs.readFileSync(path.join(__dirname, '../dist/index.html'), 'utf-8')
+  const serverEntry = require('../dist/server-entry')
+  const template = fs.readFileSync(path.join(__dirname, '../dist/server.ejs'), 'utf-8')
   app.use('/public', express.static(path.join(__dirname, '../dist')))
-  app.get('*', (req, res) => {
-    const appString = ReactSSR.renderToString(serverEntry)
-    res.send(template.replace('<!--app-->', appString))
+  app.get('*', (req, res, next) => {
+    serverRender(serverEntry, template, req, res).catch(next)
   })
 } else {
   const devStatic = require('./utils/dev-static')
   devStatic(app)
 }
+
+app.use((error, req, res) => {
+  console.log(error)
+  res.status(500).send(error)
+})
 
 app.listen(3333, () => {
   console.log('服务启动了')
